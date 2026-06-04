@@ -1,0 +1,11 @@
+manifest:
+  remotes:
+    - name: ncs
+      url-base: https://github.com/nrfconnect
+  projects:
+    - name: sdk-nrf
+      remote: ncs
+      revision: v3.2.1
+      import: true
+  self:
+    path: ble-sensor-node

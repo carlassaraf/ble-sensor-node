@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "phase/*"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install nrfutil
+        run: |
+          curl -sSLo nrfutil https://developer.nordicsemi.com/.pc-tools/nrfutil/x64-linux/nrfutil
+          chmod +x nrfutil && sudo mv nrfutil /usr/local/bin/
+          nrfutil self-upgrade
+
+      - name: Cache NCS toolchain
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/nrfutil/toolchains
+          key: ncs-toolchain-v3.2.1
+
+      - name: Install NCS toolchain
+        run: nrfutil toolchain-manager install --ncs-version v3.2.1
+
+      - name: Cache west workspace
+        id: cache-west
+        uses: actions/cache@v4
+        with:
+          path: |
+            .west
+            nrf
+            zephyr
+            modules
+            bootloader
+            nrfxlib
+          key: west-${{ hashFiles('west.yml') }}
+
+      - name: Init west workspace
+        if: steps.cache-west.outputs.cache-hit != 'true'
+        run: |
+          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
+            west init -l .
+          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
+            west update --narrow -o=--depth=1
+
+      - name: Build (nRF5340 DK)
+        run: |
+          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
+            west build -b nrf5340dk/nrf5340/cpuapp \
+              -DCONFIG_COMPILER_WARNINGS_AS_ERRORS=y
