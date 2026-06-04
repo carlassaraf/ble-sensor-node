@@ -16,6 +16,7 @@ jobs:
           curl -sSLo nrfutil https://developer.nordicsemi.com/.pc-tools/nrfutil/x64-linux/nrfutil
           chmod +x nrfutil && sudo mv nrfutil /usr/local/bin/
           nrfutil self-upgrade
+          nrfutil install toolchain-manager
 
       - name: Cache NCS toolchain
         uses: actions/cache@v4
