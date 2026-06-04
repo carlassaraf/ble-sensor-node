@@ -51,5 +51,5 @@ jobs:
       - name: Build (nRF5340 DK)
         run: |
           nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
-            west build -b nrf5340dk/nrf5340/cpuapp \
+            west build -b nrf5340dk/nrf5340/cpuapp -- \
               -DCONFIG_COMPILER_WARNINGS_AS_ERRORS=y
