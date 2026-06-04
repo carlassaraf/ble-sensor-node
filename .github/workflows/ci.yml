@@ -1,3 +1,38 @@
+# CI workflow for ble-sensor-node.
+#
+# Runs on every push to `main` or any `phase/*` branch, and on every pull
+# request. The single job compiles the firmware for the nRF5340 DK application
+# core. No hardware is required; this is a pure compile-check.
+#
+# HIGH-LEVEL FLOW
+# ───────────────
+# 1. Install nrfutil — Nordic's CLI launcher.
+# 2. Install the NCS toolchain via nrfutil — this gives us a hermetic ARM GCC,
+#    CMake, Ninja, and west that are all version-locked to NCS_VERSION.
+# 3. Restore (or populate) two caches so repeat runs are fast:
+#    a. The toolchain itself  (~2 GB, keyed on NCS version).
+#    b. The west workspace    (~10 GB shallow, keyed on NCS version + west.yml).
+# 4. If the west workspace cache missed, run `west init` + `west update` to
+#    clone sdk-nrf, Zephyr, and all transitive dependencies.
+# 5. Build with `west build` through nrfutil so the hermetic toolchain is used.
+#
+# WORKSPACE LAYOUT (GitHub-hosted runner)
+# ────────────────────────────────────────
+# GitHub Actions checks the repo out to:
+#   /home/runner/work/ble-sensor-node/ble-sensor-node/   ← GITHUB_WORKSPACE
+#
+# `west init -l <GITHUB_WORKSPACE>` treats the repo as the manifest and
+# creates the west workspace ONE LEVEL UP:
+#   /home/runner/work/ble-sensor-node/     ← west workspace root
+#     ble-sensor-node/                     ← this repo
+#     nrf/                                 ← sdk-nrf
+#     zephyr/                              ← Zephyr RTOS
+#     modules/ bootloader/ nrfxlib/ …
+#
+# All cache paths therefore use `${{ github.workspace }}/..` to reach the
+# workspace root. Steps that drive west also run with
+# `working-directory: ${{ github.workspace }}/..` for the same reason.
+
 name: CI
 
 on:
@@ -6,6 +41,8 @@ on:
   pull_request:
 
 env:
+  # Single place to bump the SDK version. Referenced in every nrfutil and
+  # cache-key expression below.
   NCS_VERSION: v3.2.1
 
 jobs:
@@ -14,6 +51,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ── Step 1: nrfutil ────────────────────────────────────────────────────
+      # nrfutil is Nordic's launcher binary. It is intentionally minimal on
+      # its own; all real functionality lives in separately installed plugins.
+      # `nrfutil install toolchain-manager` adds the plugin that knows how to
+      # download and activate a versioned NCS toolchain.
       - name: Install nrfutil
         run: |
           curl -sSLo nrfutil https://developer.nordicsemi.com/.pc-tools/nrfutil/x64-linux/nrfutil
@@ -21,17 +63,30 @@ jobs:
           nrfutil self-upgrade
           nrfutil install toolchain-manager
 
+      # ── Step 2: NCS toolchain cache ────────────────────────────────────────
+      # The toolchain (~2 GB) is keyed solely on NCS_VERSION: it never changes
+      # for a given version, so we skip the download on every run after the
+      # first. The restore happens BEFORE the install step so that a cache hit
+      # makes the install a no-op.
       - name: Cache NCS toolchain
         uses: actions/cache@v4
         with:
           path: ~/.local/share/nrfutil/toolchains
           key: ncs-toolchain-${{ env.NCS_VERSION }}
 
+      # ── Step 3: NCS toolchain install ─────────────────────────────────────
+      # Downloads ARM GCC, CMake, Ninja, west, and all Python dependencies for
+      # the requested NCS version into ~/.local/share/nrfutil/toolchains/.
+      # If the cache from Step 2 was a hit this finishes instantly.
       - name: Install NCS toolchain
         run: nrfutil toolchain-manager install --ncs-version ${{ env.NCS_VERSION }}
 
-      # west init -l . creates the workspace one level ABOVE the checkout
-      # (/home/runner/work/ble-sensor-node/), so all west paths live there.
+      # ── Step 4: West workspace cache ───────────────────────────────────────
+      # The full west workspace (sdk-nrf + Zephyr + modules + …) is ~10 GB.
+      # We cache it keyed on NCS_VERSION + the hash of west.yml so the cache
+      # is invalidated whenever we change the manifest (new SDK version, added
+      # project, etc.). The `id: cache-west` lets the Init step below check
+      # whether this was a hit and skip the slow `west update` when it was.
       - name: Cache west workspace
         id: cache-west
         uses: actions/cache@v4
@@ -45,6 +100,20 @@ jobs:
             ${{ github.workspace }}/../nrfxlib
           key: west-${{ env.NCS_VERSION }}-${{ hashFiles('west.yml') }}
 
+      # ── Step 5: West workspace init ────────────────────────────────────────
+      # Only runs on a cache miss (first run, or after west.yml changes).
+      #
+      # `west init -l <path>` — "local init": registers an already-cloned repo
+      # as the west manifest without fetching it again. Creates `.west/config`
+      # in the workspace root (one level above the repo checkout).
+      #
+      # `west update --narrow -o=--depth=1`
+      #   --narrow      minimises the set of git refs fetched (no tags, etc.)
+      #   -o=--depth=1  shallow-clones every project to save time and disk
+      #
+      # Both commands run from `${{ github.workspace }}/..` (the workspace root)
+      # so that west places sdk-nrf, zephyr, etc. at the top level alongside
+      # the repo, not nested inside it.
       - name: Init west workspace
         if: steps.cache-west.outputs.cache-hit != 'true'
         working-directory: ${{ github.workspace }}/..
@@ -54,6 +123,23 @@ jobs:
           nrfutil toolchain-manager launch --ncs-version ${{ env.NCS_VERSION }} -- \
             west update --narrow -o=--depth=1
 
+      # ── Step 6: Build ──────────────────────────────────────────────────────
+      # `nrfutil toolchain-manager launch -- <cmd>` runs <cmd> inside the
+      # hermetic toolchain environment (correct PATH, ZEPHYR_BASE, etc.).
+      #
+      # `west build -b nrf5340dk/nrf5340/cpuapp`
+      #   Targets the application core of the nRF5340 DK. West finds the
+      #   workspace root by walking up from the CWD until it finds `.west/`.
+      #
+      # `--no-sysbuild`
+      #   Sysbuild coordinates a two-image build (cpuapp + cpunet). We don't
+      #   have network-core firmware yet (that arrives in Phase 3 with BLE).
+      #   Remove this flag in Phase 3 when the SoftDevice Controller requires
+      #   a coordinated cpunet image.
+      #
+      # `-- -DCONFIG_COMPILER_WARNINGS_AS_ERRORS=y`
+      #   Everything after `--` is forwarded to CMake. Treats all compiler
+      #   warnings as errors so the CI catches regressions immediately.
       - name: Build (nRF5340 DK)
         run: |
           nrfutil toolchain-manager launch --ncs-version ${{ env.NCS_VERSION }} -- \

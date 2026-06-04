@@ -1,12 +1,46 @@
+# West manifest for ble-sensor-node.
+#
+# West is Nordic/Zephyr's meta-tool for managing a multi-repo workspace.
+# This file is the single source of truth for which SDK version the project
+# uses and where every dependency is cloned on disk.
+#
+# Workspace layout after `west init -l <this-repo>` + `west update`:
+#
+#   <workspace-root>/
+#     ble-sensor-node/   ← this repo  (declared in `self` below)
+#     nrf/               ← sdk-nrf v3.2.1
+#     zephyr/            ← Zephyr RTOS  (version pinned by sdk-nrf)
+#     modules/           ← Zephyr modules (hal, crypto, fs, …)
+#     bootloader/        ← MCUboot
+#     nrfxlib/           ← Nordic closed-source libs (SoftDevice Controller, …)
+#
+# The workspace root is the directory that CONTAINS this repo, not the repo
+# itself. That is why CI caches paths like `$GITHUB_WORKSPACE/../nrf`.
+
 manifest:
   remotes:
+    # All Nordic repositories live under github.com/nrfconnect.
     - name: ncs
       url-base: https://github.com/nrfconnect
+
   projects:
+    # sdk-nrf is the top-level NCS repository. It re-exports its own west
+    # manifest (import: true), which transitively pulls in Zephyr, modules,
+    # bootloader, nrfxlib, and every other dependency at the exact revisions
+    # Nordic has validated for v3.2.1.
+    #
+    # `path: nrf` is required. Without it west would clone this repo into a
+    # directory named `sdk-nrf` (the project name), but NCS CMake scripts
+    # look for the module under the name `nrf`, so the build would fail to
+    # locate NRF_DIR and sysbuild Kconfig.
     - name: sdk-nrf
       remote: ncs
       revision: v3.2.1
       path: nrf
       import: true
+
   self:
+    # Tells west that THIS repository is already present in the workspace at
+    # the path `ble-sensor-node`. West uses this when you run
+    # `west init -l <path-to-this-repo>` so it does not try to clone it again.
     path: ble-sensor-node
