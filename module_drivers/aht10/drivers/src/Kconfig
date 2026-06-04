@@ -1,0 +1,16 @@
+# Copyright (c) 2024 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+menuconfig AHT10
+	bool "AHT10 sensor driver"
+	help
+	  This option enables the AHT10 sensor driver.
+
+if AHT10
+
+# Logging is used in the driver, so we need to enable it if the driver is enabled.
+module = AHT10
+module-str = aht10
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # AHT10
