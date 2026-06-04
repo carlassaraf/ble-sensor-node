@@ -1,0 +1,10 @@
+&i2c1 {
+  status = "okay";
+
+  aht10: aht10@38 {
+    compatible = "aht10";
+    reg = <0x38>;
+    pinctrl-0 = <&i2c1_default>;
+    pinctrl-1 = <&i2c1_default>;
+  };
+};
