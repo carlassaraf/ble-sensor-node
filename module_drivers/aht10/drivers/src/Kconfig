@@ -8,6 +8,13 @@ menuconfig AHT10
 
 if AHT10
 
+config AHT10_INIT_PRIORITY
+	int "AHT10 initialization priority"
+	default 90
+	help
+	  Initialization priority for the AHT10 driver. Must be higher than
+	  the I2C bus init priority (CONFIG_I2C_INIT_PRIORITY, default 50).
+
 # Logging is used in the driver, so we need to enable it if the driver is enabled.
 module = AHT10
 module-str = aht10
