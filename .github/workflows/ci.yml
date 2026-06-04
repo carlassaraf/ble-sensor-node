@@ -5,6 +5,9 @@ on:
     branches: [main, "phase/*"]
   pull_request:
 
+env:
+  NCS_VERSION: v3.2.1
+
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -22,34 +25,37 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.local/share/nrfutil/toolchains
-          key: ncs-toolchain-v3.2.1
+          key: ncs-toolchain-${{ env.NCS_VERSION }}
 
       - name: Install NCS toolchain
-        run: nrfutil toolchain-manager install --ncs-version v3.2.1
+        run: nrfutil toolchain-manager install --ncs-version ${{ env.NCS_VERSION }}
 
+      # west init -l . creates the workspace one level ABOVE the checkout
+      # (/home/runner/work/ble-sensor-node/), so all west paths live there.
       - name: Cache west workspace
         id: cache-west
         uses: actions/cache@v4
         with:
           path: |
-            .west
-            nrf
-            zephyr
-            modules
-            bootloader
-            nrfxlib
-          key: west-${{ hashFiles('west.yml') }}
+            ${{ github.workspace }}/../.west
+            ${{ github.workspace }}/../nrf
+            ${{ github.workspace }}/../zephyr
+            ${{ github.workspace }}/../modules
+            ${{ github.workspace }}/../bootloader
+            ${{ github.workspace }}/../nrfxlib
+          key: west-${{ env.NCS_VERSION }}-${{ hashFiles('west.yml') }}
 
       - name: Init west workspace
         if: steps.cache-west.outputs.cache-hit != 'true'
+        working-directory: ${{ github.workspace }}/..
         run: |
-          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
-            west init -l .
-          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
+          nrfutil toolchain-manager launch --ncs-version ${{ env.NCS_VERSION }} -- \
+            west init -l ${{ github.workspace }}
+          nrfutil toolchain-manager launch --ncs-version ${{ env.NCS_VERSION }} -- \
             west update --narrow -o=--depth=1
 
       - name: Build (nRF5340 DK)
         run: |
-          nrfutil toolchain-manager launch --ncs-version v3.2.1 -- \
-            west build -b nrf5340dk/nrf5340/cpuapp -- \
+          nrfutil toolchain-manager launch --ncs-version ${{ env.NCS_VERSION }} -- \
+            west build --no-sysbuild -b nrf5340dk/nrf5340/cpuapp -- \
               -DCONFIG_COMPILER_WARNINGS_AS_ERRORS=y
