@@ -2,6 +2,7 @@
 #include <zephyr/logging/log.h>
 #include <aht10/aht10.hpp>
 #include <ble/ble.hpp>
+#include <ble/aht10_service.hpp>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -15,6 +16,7 @@ int main(void)
   }
 
   BLE ble;
+  AHT10Service service;
   while(!ble.isEnabled()) {
     LOG_INF("Waiting for Bluetooth to be enabled...");
     k_msleep(100);
