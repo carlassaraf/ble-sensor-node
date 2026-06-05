@@ -10,6 +10,10 @@
 
 // Device API structure for AHT10 sensor
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 __subsystem struct aht10_driver_api {
   /**
    * @brief Read the temperature from the AHT10 sensor.
@@ -50,5 +54,9 @@ static inline int z_impl_aht10_read_humidity(const struct device *dev, float *hu
 }
 
 #include <syscalls/aht10.h>
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
