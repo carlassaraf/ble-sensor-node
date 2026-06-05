@@ -1,6 +1,7 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <aht10/aht10.hpp>
+#include <ble/ble.hpp>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -12,6 +13,13 @@ int main(void)
     LOG_ERR("AHT10 device is not ready");
     return -1;
   }
+
+  BLE ble;
+  while(!ble.isEnabled()) {
+    LOG_INF("Waiting for Bluetooth to be enabled...");
+    k_msleep(100);
+  }
+  ble.startAdvertising();
 
   while(1) {
     float temp, humidity;

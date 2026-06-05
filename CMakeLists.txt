@@ -6,3 +6,4 @@ project(ble-sensor-node)
 
 target_sources(app PRIVATE app/src/main.cpp)
 target_include_directories(app PRIVATE app/src)
+add_subdirectory(app/src/ble)
