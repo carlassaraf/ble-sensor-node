@@ -1,25 +1,26 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
-#include <aht10.h>
+#include <aht10/aht10.hpp>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
 int main(void)
 {
   const struct device *aht10_dev = DEVICE_DT_GET(DT_NODELABEL(aht10));
-  if(!device_is_ready(aht10_dev)) {
+  AHT10 aht10(aht10_dev);
+  if (!aht10.isInitialized()) {
     LOG_ERR("AHT10 device is not ready");
     return -1;
   }
 
   while(1) {
     float temp, humidity;
-    int ret = aht10_read_temperature(aht10_dev, &temp);
+    int ret = aht10.readTemperature(temp);
     if (ret) {
       LOG_ERR("Failed to read temperature from AHT10 device (err %d)", ret);
       return -1;
     }
-    ret = aht10_read_humidity(aht10_dev, &humidity);
+    ret = aht10.readHumidity(humidity);
     if (ret) {
       LOG_ERR("Failed to read humidity from AHT10 device (err %d)", ret);
       return -1;
