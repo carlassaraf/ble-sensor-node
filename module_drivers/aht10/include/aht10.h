@@ -4,16 +4,13 @@
 #include <zephyr/device.h>
 #include <zephyr/toolchain.h>
 
+// Device command definitions for AHT10 sensor
+#define AHT10_CMD_INIT      0xE1
+#define AHT10_CMD_TRIGGER   0xAC
+
+// Device API structure for AHT10 sensor
+
 __subsystem struct aht10_driver_api {
-	/**
-	 * @brief Configure the AHT10 sensor.
-	 *
-	 * @param dev AHT10 device instance.
-	 *
-	 * @retval 0 if successful.
-	 * @retval -errno Other negative errno code on failure.
-	 */
-	int (*init)(const struct device *dev);
   /**
    * @brief Read the temperature from the AHT10 sensor.
    *
@@ -35,14 +32,6 @@ __subsystem struct aht10_driver_api {
    */
   int (*read_humidity)(const struct device *dev, float *humidity);
 };
-
-__syscall int aht10_init(const struct device *dev);
-
-static inline int z_impl_aht10_init(const struct device *dev)
-{
-	__ASSERT_NO_MSG(DEVICE_API_IS(aht10, dev));  
-	return DEVICE_API_GET(aht10, dev)->init(dev);
-}
 
 __syscall int aht10_read_temperature(const struct device *dev, float *temperature);
 

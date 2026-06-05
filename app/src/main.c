@@ -12,15 +12,9 @@ int main(void)
     return -1;
   }
 
-  int ret = aht10_init(aht10_dev);
-  if (ret) {
-    LOG_ERR("Failed to initialize AHT10 device (err %d)", ret);
-    return -1;
-  }
-
   while(1) {
     float temp, humidity;
-    ret = aht10_read_temperature(aht10_dev, &temp);
+    int ret = aht10_read_temperature(aht10_dev, &temp);
     if (ret) {
       LOG_ERR("Failed to read temperature from AHT10 device (err %d)", ret);
       return -1;
