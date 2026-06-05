@@ -25,7 +25,9 @@ struct aht10_data {
 // Internal implementations
 static int aht10_drv_read_raw(const struct device *dev) {
   const struct aht10_config *config = dev->config;
+  (void)config; // Suppress unused variable warning
   struct aht10_data *data = dev->data;
+  
   // Read raw data from the AHT10 sensor using I2C
   // This is a placeholder, actual I2C read commands should be implemented here
   LOG_DBG("Reading raw data from AHT10 sensor");
@@ -39,8 +41,6 @@ static int aht10_drv_read_raw(const struct device *dev) {
 static int aht10_drv_init(const struct device *dev)
 {
   const struct aht10_config *config = dev->config;
-  struct aht10_data *data = dev->data;
-
   if (!device_is_ready(config->i2c.bus)) {
     LOG_ERR("I2C bus is not ready");
     return -ENODEV;
@@ -57,6 +57,7 @@ static int aht10_drv_read_temperature(const struct device *dev, float *temperatu
 {
   const struct aht10_config *config = dev->config;
   struct aht10_data *data = dev->data;
+  (void)config; // Suppress unused variable warning
 
   aht10_drv_read_raw(dev);
   // Read temperature data from the AHT10 sensor
@@ -71,6 +72,7 @@ static int aht10_drv_read_humidity(const struct device *dev, float *humidity)
 {
   const struct aht10_config *config = dev->config;
   struct aht10_data *data = dev->data;
+  (void)config; // Suppress unused variable warning
 
   aht10_drv_read_raw(dev);
   // Read humidity data from the AHT10 sensor
