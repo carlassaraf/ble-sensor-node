@@ -30,7 +30,7 @@ int main(void)
       LOG_ERR("Failed to read humidity from AHT10 device (err %d)", ret);
       return -1;
     }
-    LOG_INF("Temperature: %.2f °C, Humidity: %.2f %%", temp, humidity);
+    LOG_INF("Temperature: %d.%.2d °C, Humidity: %d.%.2d %%", (int)temp, (int)(temp * 100) % 100, (int)humidity, (int)(humidity * 100) % 100);
     k_msleep(500);
   }
   return 0;
