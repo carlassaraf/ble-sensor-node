@@ -1,9 +1,23 @@
+&i2c1_default {
+  group1 {
+    psels = <NRF_PSEL(TWIM_SDA, 0, 30)>,
+      <NRF_PSEL(TWIM_SCL, 0, 31)>;
+  };
+};
+
+&i2c1_sleep {
+  group1 {
+    psels = <NRF_PSEL(TWIM_SDA, 0, 30)>,
+      <NRF_PSEL(TWIM_SCL, 0, 31)>;
+    low-power-enable;
+  };
+};
+
 &i2c1 {
   status = "okay";
   clock-frequency = <100000>;
   pinctrl-0 = <&i2c1_default>;
   pinctrl-1 = <&i2c1_sleep>;
-  pinctrl-names = "default", "sleep";
 
   aht10: aht10@38 {
     compatible = "asair,aht10";
