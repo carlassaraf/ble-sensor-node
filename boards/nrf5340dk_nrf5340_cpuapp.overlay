@@ -1,10 +1,12 @@
 &i2c1 {
   status = "okay";
+  clock-frequency = <100000>;
+  pinctrl-0 = <&i2c1_default>;
+  pinctrl-1 = <&i2c1_sleep>;
+  pinctrl-names = "default", "sleep";
 
   aht10: aht10@38 {
     compatible = "asair,aht10";
     reg = <0x38>;
-    pinctrl-0 = <&i2c1_default>;
-    pinctrl-1 = <&i2c1_default>;
   };
 };
