@@ -24,4 +24,7 @@ private:
   static void onConnected(struct bt_conn *conn, uint8_t err);
   static void onDisconnected(struct bt_conn *conn, uint8_t reason);
   static void onRecycled();
+
+  static void auth_passkey_display(struct bt_conn *conn, unsigned int passkey);
+  static void auth_cancel(struct bt_conn *conn);
 };
