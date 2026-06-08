@@ -6,12 +6,18 @@
 #include <zephyr/bluetooth/conn.h>
 #include <zephyr/bluetooth/gap.h>
 
+#include "led/led.hpp"
+
 class BLE {
 public:
-  BLE();
+  BLE(LED advLED, LED connLED, LED disLED);
   bool startAdvertising();
   bool isEnabled() const { return enabled; }
   bool isConnected() const { return connected; }
+
+  LED advLED;
+  LED connLED;
+  LED disLED;
 
 private:
   static inline BLE *instance = nullptr;
