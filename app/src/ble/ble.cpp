@@ -1,6 +1,6 @@
 #include "ble.hpp"
 
-LOG_MODULE_REGISTER(ble, LOG_LEVEL_ERR);
+LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
 
 namespace ble_params {
 
@@ -20,6 +20,7 @@ namespace ble_params {
   };
   // Connection callbacks
   static struct bt_conn_cb conn_callbacks = {};
+  static struct bt_conn_auth_cb conn_auth_callbacks = {};
 };
 
 BLE::BLE() {
@@ -29,6 +30,10 @@ BLE::BLE() {
   ble_params::conn_callbacks.disconnected = BLE::onDisconnected;
   ble_params::conn_callbacks.recycled = BLE::onRecycled;
   bt_conn_cb_register(&ble_params::conn_callbacks);
+  // Register authorization callbacks
+  ble_params::conn_auth_callbacks.cancel = BLE::auth_cancel;
+  ble_params::conn_auth_callbacks.passkey_display = BLE::auth_passkey_display;
+  bt_conn_auth_cb_register(&ble_params::conn_auth_callbacks);
   // Initiate work item for advertising
   k_work_init(&adv_work, BLE::adv_work_handler);
   // Enable Bluetooth
@@ -83,4 +88,18 @@ void BLE::onRecycled() {
   LOG_DBG("Connection object recycled, can start new connection or advertiser");
   // Handle advertising outside BT stack context
   k_work_submit(&instance->adv_work);
+}
+
+void BLE::auth_passkey_display(struct bt_conn *conn, unsigned int passkey)
+{
+  char addr[BT_ADDR_LE_STR_LEN];
+  bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
+  LOG_INF("Passkey for %s: %06u\n", addr, passkey);
+}
+
+void BLE::auth_cancel(struct bt_conn *conn)
+{
+	char addr[BT_ADDR_LE_STR_LEN];
+	bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
+	LOG_INF("Pairing cancelled: %s\n", addr);
 }
