@@ -20,9 +20,9 @@ namespace ess {
   BT_GATT_SERVICE_DEFINE(svc,
     BT_GATT_PRIMARY_SERVICE(BT_UUID_ESS),
     BT_GATT_CHARACTERISTIC(BT_UUID_TEMPERATURE, BT_GATT_CHRC_NOTIFY, BT_GATT_PERM_NONE, NULL, NULL, NULL),
-    BT_GATT_CCC(AHT10Service::onTempCccChanged, BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+    BT_GATT_CCC(AHT10Service::onTempCccChanged, BT_GATT_PERM_READ_AUTHEN | BT_GATT_PERM_WRITE_AUTHEN),
     BT_GATT_CHARACTERISTIC(BT_UUID_HUMIDITY,    BT_GATT_CHRC_NOTIFY, BT_GATT_PERM_NONE, NULL, NULL, NULL),
-    BT_GATT_CCC(AHT10Service::onHumCccChanged,  BT_GATT_PERM_READ | BT_GATT_PERM_WRITE),
+    BT_GATT_CCC(AHT10Service::onHumCccChanged,  BT_GATT_PERM_READ_AUTHEN | BT_GATT_PERM_WRITE_AUTHEN),
   );
 };
 
@@ -45,13 +45,13 @@ void AHT10ServiceThread::run(void *context)
     if (service->humIsSubscribed() && aht10.isInitialized()) {
       float hum = 0.0;
       aht10.readHumidity(hum);
-      uint16_t hum_val = static_cast<uint16_t>(hum * 100);
+      uint16_t hum_val = static_cast<uint16_t>(hum);
       bt_gatt_notify(NULL, &ess::svc.attrs[5], &hum_val, sizeof(hum_val));
     }
     if (service->tempIsSubscribed() && aht10.isInitialized()) {
       float temp = 0.0;
       aht10.readTemperature(temp);
-      int16_t temp_val = static_cast<int16_t>(temp * 100);
+      int16_t temp_val = static_cast<int16_t>(temp);
       bt_gatt_notify(NULL, &ess::svc.attrs[2], &temp_val, sizeof(temp_val));
     }
     sleep_ms(100);

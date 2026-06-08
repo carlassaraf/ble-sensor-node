@@ -30,7 +30,7 @@ public:
   bool tempIsSubscribed() { return tempSubscription; }
   /** @brief Returns client's notification request to humidity characteristic */
   bool humIsSubscribed() { return humSubscription; }
-
+  /** @brief Starts BLE service thread */
   void start() { thread.start(this); }
 
 private:
