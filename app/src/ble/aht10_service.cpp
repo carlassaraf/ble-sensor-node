@@ -11,7 +11,6 @@
 #include <zephyr/bluetooth/gatt.h>
 
 #include "aht10_service.hpp"
-#include "zephyr_wrappers/thread.hpp"
 
 LOG_MODULE_REGISTER(aht10_service, LOG_LEVEL_INF);
 
@@ -32,7 +31,8 @@ namespace ess_thread {
   K_THREAD_STACK_DEFINE(thread_stask, stack_size);
 };
 
-AHT10Service::AHT10Service(AHT10 &aht10) : 
+AHT10Service::AHT10Service(AHT10 &aht10, LED led) :
+  led(led),
   thread(AHT10ServiceThread(ess_thread::thread_stask, ess_thread::stack_size, ess_thread::prio, aht10))
 {
   instance = this;
@@ -41,7 +41,22 @@ AHT10Service::AHT10Service(AHT10 &aht10) :
 void AHT10ServiceThread::run(void *context)
 {
   auto *service = static_cast<AHT10Service *>(context);
+  auto led = service->led;
+  bool ledState = service->led.get();
+  int ledTick = 0;
+
   while (1) {
+    bool active = service->humIsSubscribed() || service->tempIsSubscribed();
+    if(active && ++ledTick >= 2) {
+      ledTick = 0;
+      ledState = !ledState;
+      led.set(ledState);
+    } else if(!active) {
+      led.off();
+      ledTick = 0;
+      ledState = false;
+    }
+
     if (service->humIsSubscribed() && aht10.isInitialized()) {
       float hum = 0.0;
       aht10.readHumidity(hum);
