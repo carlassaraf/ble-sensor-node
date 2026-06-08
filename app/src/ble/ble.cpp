@@ -23,7 +23,7 @@ namespace ble_params {
   static struct bt_conn_auth_cb conn_auth_callbacks = {};
 };
 
-BLE::BLE() {
+BLE::BLE(LED advLED, LED connLED, LED disLED) : advLED(advLED), connLED(connLED), disLED(disLED) {
   instance = this;
   // Register connection callbacks
   ble_params::conn_callbacks.connected = BLE::onConnected;
@@ -50,6 +50,7 @@ bool BLE::startAdvertising() {
     return false;
   }
   LOG_DBG("Advertising started successfully");
+  advLED.on();
   return true;
 }
 
@@ -74,6 +75,9 @@ void BLE::onConnected(struct bt_conn *conn, uint8_t err) {
   // Increment reference count
   instance->current_conn = bt_conn_ref(conn);
   instance->connected = true;
+  instance->advLED.off();
+  instance->disLED.off();
+  instance->connLED.on();
   LOG_DBG("Connected");
 }
 
@@ -81,6 +85,8 @@ void BLE::onDisconnected(struct bt_conn *conn, uint8_t reason) {
   // Decrement reference count
   bt_conn_unref(conn);
   instance->connected = false;
+  instance->connLED.off();
+  instance->disLED.on();
   LOG_DBG("Disconnected (reason %d)", reason);
 }
 

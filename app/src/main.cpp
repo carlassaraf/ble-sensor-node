@@ -15,8 +15,8 @@ int main(void)
     return -1;
   }
 
-  BLE ble;
-  AHT10Service service(aht10);
+  BLE ble(LED(BoardLEDs::led2), LED(BoardLEDs::led3), LED(BoardLEDs::led4));
+  AHT10Service service(aht10, LED(BoardLEDs::led1));
   service.start();
 
   while(!ble.isEnabled()) {

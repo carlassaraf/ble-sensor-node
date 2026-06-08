@@ -4,6 +4,7 @@
 #include "characteristic.hpp"
 #include "aht10/aht10.hpp"
 #include "zephyr_wrappers/thread.hpp"
+#include "led/led.hpp"
 
 class AHT10Service;
 
@@ -21,7 +22,7 @@ private:
 
 class AHT10Service : Service {
 public:
-  AHT10Service(AHT10 &aht10);
+  AHT10Service(AHT10 &aht10, LED led);
 
   static void onTempCccChanged(const struct bt_gatt_attr *attr, uint16_t value);
   static void onHumCccChanged(const struct bt_gatt_attr *attr, uint16_t value);
@@ -32,6 +33,8 @@ public:
   bool humIsSubscribed() { return humSubscription; }
   /** @brief Starts BLE service thread */
   void start() { thread.start(this); }
+
+  LED led;
 
 private:
   static inline AHT10Service *instance = nullptr;
