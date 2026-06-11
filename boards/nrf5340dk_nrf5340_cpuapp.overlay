@@ -70,6 +70,7 @@
       pixel-format      = <0>; /* 0 = RGB565 */
       width             = <240>;
       height            = <320>;
+      rotation          = <90>;   /* 0 | 90 | 180 | 270 CW — adjust to match physical mount */
     };
   };
 };
