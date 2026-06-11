@@ -2,6 +2,7 @@
 #include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
+#include "ui.h"
 #include "lvgl_port.hpp"
 
 LOG_MODULE_REGISTER(lvgl_port, LOG_LEVEL_INF);
@@ -51,14 +52,6 @@ void LVGL::start() {
   int ret = display_blanking_off(display);
   LOG_INF("blanking_off: %d", ret);
 
-  lv_obj_t *scr = lv_scr_act();
-  lv_obj_set_style_bg_color(scr, lv_color_hex(0xff00ff), LV_PART_MAIN);
-  lv_obj_t *lbl_temp = lv_label_create(scr);
-  lv_obj_t *lbl_hum  = lv_label_create(scr);
-  lv_obj_set_pos(lbl_temp, 10, 10);
-  lv_obj_set_pos(lbl_hum,  10, 80);
-  lv_label_set_text(lbl_temp, "Temp: --");
-  lv_label_set_text(lbl_hum,  "Hum:  --");
-
+  ui_init();
   Thread::start(this);
 }
