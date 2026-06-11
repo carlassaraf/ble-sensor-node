@@ -6,8 +6,8 @@ void ScreenBLE::show() {
 }
 
 void ScreenBLE::update(float &temperature, float &humidity) {
-  lv_label_set_text_fmt(ui_lblTempV, "%5.2f C", temperature);
-  lv_label_set_text_fmt(ui_lblHumV, "%5.2f %%", humidity);
+  lv_label_set_text_fmt(ui_lblTempV, "%02d.%02d C", (int)temperature, (int)(100 * (temperature - (int)temperature)));
+  lv_label_set_text_fmt(ui_lblHumV, "%02d.%02d %%", (int)humidity, (int)(100 * (humidity - (int)humidity)));
 }
 
 void ScreenBLE::hide() {
