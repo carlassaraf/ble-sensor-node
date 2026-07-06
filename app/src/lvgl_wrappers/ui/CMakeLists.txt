@@ -1,12 +1,21 @@
-target_sources(app PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/screens/ui_scrBLE.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/components/ui_comp_hook.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/ui_helpers.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/images/ui_img_bg_main_png.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/images/ui_img_icon_temperature_png.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/images/ui_img_icon_humidity_png.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/fonts/ui_font_Nunito28.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/fonts/ui_font_Nunito20.c)
+SET(SOURCES components/ui_comp_topbar.c
+    components/ui_comp.c
+    screens/ui_scrBLE.c
+    ui_theme_manager.c
+    ui_themes.c
+    ui.c
+    components/ui_comp_hook.c
+    ui_helpers.c
+    images/ui_img_icons_signal_png.c
+    images/ui_img_icons_left_png.c
+    images/ui_img_icons_right_png.c
+    fonts/ui_font_caps11b.c
+    fonts/ui_font_micro8b.c
+    fonts/ui_font_mono17m.c
+    fonts/ui_font_mono9.c
+    fonts/ui_font_sub10.c
+    fonts/ui_font_title17xb.c
+    fonts/ui_font_value22b.c
+    fonts/ui_font_body12sb.c)
 
-target_include_directories(app PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(ui ${SOURCES})
