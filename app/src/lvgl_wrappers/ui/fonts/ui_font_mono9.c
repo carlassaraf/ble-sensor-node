@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Size: 9 px
  * Bpp: 4
- * Opts: --bpp 4 --size 9 --font /Users/carlassaraf/SquareLine/assets/fonts/JetBrainsMono-Regular.ttf -o /Users/carlassaraf/SquareLine/assets/fonts/ui_font_mono9.c --format lvgl -r 0x20-0x7f --no-compress --no-prefilter
+ * Opts: --bpp 4 --size 9 --font /Users/carlassaraf/SquareLine/assets/fonts/JetBrainsMono-Regular.ttf -o /Users/carlassaraf/SquareLine/assets/fonts/ui_font_mono9.c --format lvgl -r 0x20-0x7f -r 0xb0 --no-compress --no-prefilter
  ******************************************************************************/
 
 #include "../ui.h"
@@ -443,7 +443,10 @@ static LV_ATTRIBUTE_LARGE_CONST const uint8_t glyph_bitmap[] = {
     0xc0, 0x0, 0xc, 0x0, 0x2b, 0x50, 0x0,
 
     /* U+007E "~" */
-    0x2b, 0x90, 0xa5, 0x44, 0xb6
+    0x2b, 0x90, 0xa5, 0x44, 0xb6,
+
+    /* U+00B0 "°" */
+    0x37, 0x60, 0x90, 0x80, 0x37, 0x60
 };
 
 
@@ -547,7 +550,8 @@ static const lv_font_fmt_txt_glyph_dsc_t glyph_dsc[] = {
     {.bitmap_index = 1438, .adv_w = 86, .box_w = 5, .box_h = 9, .ofs_x = 0, .ofs_y = -1},
     {.bitmap_index = 1461, .adv_w = 86, .box_w = 2, .box_h = 9, .ofs_x = 2, .ofs_y = -1},
     {.bitmap_index = 1470, .adv_w = 86, .box_w = 5, .box_h = 9, .ofs_x = 0, .ofs_y = -1},
-    {.bitmap_index = 1493, .adv_w = 86, .box_w = 5, .box_h = 2, .ofs_x = 0, .ofs_y = 2}
+    {.bitmap_index = 1493, .adv_w = 86, .box_w = 5, .box_h = 2, .ofs_x = 0, .ofs_y = 2},
+    {.bitmap_index = 1498, .adv_w = 86, .box_w = 4, .box_h = 3, .ofs_x = 1, .ofs_y = 4}
 };
 
 /*---------------------
@@ -561,6 +565,10 @@ static const lv_font_fmt_txt_cmap_t cmaps[] =
 {
     {
         .range_start = 32, .range_length = 95, .glyph_id_start = 1,
+        .unicode_list = NULL, .glyph_id_ofs_list = NULL, .list_length = 0, .type = LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY
+    },
+    {
+        .range_start = 176, .range_length = 1, .glyph_id_start = 96,
         .unicode_list = NULL, .glyph_id_ofs_list = NULL, .list_length = 0, .type = LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY
     }
 };
@@ -586,7 +594,7 @@ static lv_font_fmt_txt_dsc_t font_dsc = {
     .cmaps = cmaps,
     .kern_dsc = NULL,
     .kern_scale = 0,
-    .cmap_num = 1,
+    .cmap_num = 2,
     .bpp = 4,
     .kern_classes = 0,
     .bitmap_format = 0,

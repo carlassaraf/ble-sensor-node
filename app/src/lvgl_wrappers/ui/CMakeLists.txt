@@ -1,6 +1,7 @@
 SET(SOURCES components/ui_comp_topbar.c
     components/ui_comp.c
     screens/ui_scrBLE.c
+    screens/ui_scrClimate.c
     ui_theme_manager.c
     ui_themes.c
     ui.c
