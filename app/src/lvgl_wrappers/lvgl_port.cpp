@@ -2,7 +2,7 @@
 #include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
-#include "ui.h"
+#include "ui/ui.h"
 #include "lvgl_port.hpp"
 
 LOG_MODULE_REGISTER(lvgl_port, LOG_LEVEL_INF);
