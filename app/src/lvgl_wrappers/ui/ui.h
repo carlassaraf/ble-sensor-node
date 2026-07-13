@@ -33,6 +33,7 @@ LV_IMG_DECLARE( ui_img_icons_left_png);   // assets/icons/left.png
 LV_IMG_DECLARE( ui_img_icons_right_png);   // assets/icons/right.png
 
 // FONTS
+LV_FONT_DECLARE( ui_font_body12sb);
 LV_FONT_DECLARE( ui_font_caps11b);
 LV_FONT_DECLARE( ui_font_micro8b);
 LV_FONT_DECLARE( ui_font_mono17m);
@@ -40,7 +41,6 @@ LV_FONT_DECLARE( ui_font_mono9);
 LV_FONT_DECLARE( ui_font_sub10);
 LV_FONT_DECLARE( ui_font_title17xb);
 LV_FONT_DECLARE( ui_font_value22b);
-LV_FONT_DECLARE( ui_font_body12sb);
 
 // UI INIT
 void ui_init(void);
