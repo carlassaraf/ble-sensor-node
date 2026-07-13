@@ -113,7 +113,7 @@ lv_obj_set_height( ui_notifyCount, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_notifyCount, 0 );
 lv_obj_set_y( ui_notifyCount, 7 );
 lv_obj_set_align( ui_notifyCount, LV_ALIGN_TOP_RIGHT );
-lv_label_set_text(ui_notifyCount,"4/5");
+lv_label_set_text(ui_notifyCount,"0/5");
 ui_object_set_themeable_style_property(ui_notifyCount, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_accent);
 ui_object_set_themeable_style_property(ui_notifyCount, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_OPA, _ui_theme_alpha_accent);
 lv_obj_set_style_text_letter_space(ui_notifyCount, 1, LV_PART_MAIN| LV_STATE_DEFAULT);
