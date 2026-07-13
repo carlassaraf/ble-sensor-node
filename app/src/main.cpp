@@ -4,7 +4,8 @@
 #include <ble/ble.hpp>
 #include <ble/aht10_service.hpp>
 #include <lvgl_wrappers/lvgl_port.hpp>
-#include <lvgl_wrappers/screens.hpp>
+#include <lvgl_wrappers/screens/screens.hpp>
+#include <lvgl_wrappers/ui.hpp>
 
 LOG_MODULE_REGISTER(main, LOG_LEVEL_INF);
 
@@ -26,20 +27,7 @@ int main(void)
     }
     ble.startAdvertising();
 
-    LVGL lvgl;
-    lvgl.start();
-
-    ScreenBLE scrBLE;
-
-    while (1) {
-        float temp, hum;
-        aht10.readTemperature(temp);
-        aht10.readHumidity(hum);
-        lvgl.lock();
-        scrBLE.update(ble, service);
-        lvgl.unlock();
-        k_msleep(100);
-    }
-
+    UI ui(ble, service, aht10);
+    ui.run();
     return 0;
 }

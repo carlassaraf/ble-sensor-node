@@ -51,7 +51,5 @@ void LVGL::start() {
   }
   int ret = display_blanking_off(display);
   LOG_INF("blanking_off: %d", ret);
-
-  ui_init();
   Thread::start(this);
 }
