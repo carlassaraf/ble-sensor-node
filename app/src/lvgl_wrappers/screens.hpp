@@ -7,6 +7,7 @@ public:
   virtual ~Screen() = default;
   virtual void show();
   virtual void hide();
+  virtual bool isActive();
 };
 
 class ScreenBLE : public Screen {
@@ -16,6 +17,7 @@ public:
   void show() override;
   void update(BLE &ble, AHT10Service &service);
   void hide() override;
+  bool isActive() override;
 
 private:
   uint8_t notifyCount{0};
@@ -28,4 +30,14 @@ private:
   void updateNotifyTemperature(AHT10Service &service);
   void updateNotifyHumidity(AHT10Service &service);
   void updateNotifyCount(void);
+};
+
+class ScreenClimate : public Screen {
+
+public:
+  ~ScreenClimate() override;
+  void show() override;
+  void update(AHT10 &aht);
+  void hide() override;
+  bool isActive() override;
 };

@@ -20,6 +20,11 @@ void ScreenBLE::hide()
 
 }
 
+bool ScreenBLE::isActive()
+{
+  return lv_screen_active() == ui_scrBLE;
+}
+
 ScreenBLE::~ScreenBLE()
 {
   ui_scrBLE_screen_destroy();
