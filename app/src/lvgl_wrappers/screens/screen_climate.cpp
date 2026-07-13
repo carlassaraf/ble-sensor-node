@@ -1,12 +1,27 @@
-#include "ui/ui.h"
+#include "../ui/ui.h"
 #include "screens.hpp"
+
+ScreenClimate::ScreenClimate(AHT10 &aht) : aht(aht)
+{
+  
+}
+
+ScreenClimate::~ScreenClimate()
+{
+  ui_scrClimate_screen_destroy();
+}
 
 void ScreenClimate::show()
 {
   _ui_screen_change(&ui_scrClimate, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_scrClimate_screen_init);
 }
 
-void ScreenClimate::update(AHT10 &aht)
+void ScreenClimate::hide()
+{
+
+}
+
+void ScreenClimate::update()
 {
   if(aht.isInitialized()) {
     float temp = 0.0, hum = 0.0;
@@ -19,17 +34,7 @@ void ScreenClimate::update(AHT10 &aht)
   }
 }
 
-void ScreenClimate::hide()
-{
-
-}
-
 bool ScreenClimate::isActive()
 {
   return lv_screen_active() == ui_scrClimate;
-}
-
-ScreenClimate::~ScreenClimate()
-{
-  ui_scrClimate_screen_destroy();
 }

@@ -1,18 +1,19 @@
-#include "ui/ui.h"
+#include "../ui/ui.h"
 #include "screens.hpp"
+
+ScreenBLE::ScreenBLE(BLE &ble, AHT10Service &ahtService) : ble(ble), ahtService(ahtService)
+{
+
+}
+
+ScreenBLE::~ScreenBLE()
+{
+  ui_scrBLE_screen_destroy();
+}
 
 void ScreenBLE::show()
 {
   _ui_screen_change(&ui_scrBLE, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_scrBLE_screen_init);
-}
-
-void ScreenBLE::update(BLE &ble, AHT10Service &service)
-{
-  updateConnectionStatus(ble);
-  updateNotifyTemperature(service);
-  updateNotifyHumidity(service);
-  // Update label with characteristic notification count
-  updateNotifyCount();
 }
 
 void ScreenBLE::hide()
@@ -20,14 +21,18 @@ void ScreenBLE::hide()
 
 }
 
+void ScreenBLE::update()
+{
+  updateConnectionStatus(ble);
+  updateNotifyTemperature(ahtService);
+  updateNotifyHumidity(ahtService);
+  // Update label with characteristic notification count
+  updateNotifyCount();
+}
+
 bool ScreenBLE::isActive()
 {
   return lv_screen_active() == ui_scrBLE;
-}
-
-ScreenBLE::~ScreenBLE()
-{
-  ui_scrBLE_screen_destroy();
 }
 
 void ScreenBLE::updateConnectionStatus(BLE &ble)

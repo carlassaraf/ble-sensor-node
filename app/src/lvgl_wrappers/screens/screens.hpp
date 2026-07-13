@@ -1,3 +1,5 @@
+#pragma once
+
 #include <lvgl.h>
 #include "ble/ble.hpp"
 #include "ble/aht10_service.hpp"
@@ -8,20 +10,24 @@ public:
   virtual void show();
   virtual void hide();
   virtual bool isActive();
+  virtual void update();
 };
 
 class ScreenBLE : public Screen {
 
 public:
+  ScreenBLE(BLE &ble, AHT10Service &ahtService);
   ~ScreenBLE() override;
   void show() override;
-  void update(BLE &ble, AHT10Service &service);
   void hide() override;
+  void update() override;
   bool isActive() override;
 
 private:
   uint8_t notifyCount{0};
-  uint8_t displayedNotifyCount{0};  
+  uint8_t displayedNotifyCount{0};
+  BLE &ble;
+  AHT10Service &ahtService;
   bool connected{true};
   bool humiditySubscribed{false};
   bool temperatureSubscribed{false};
@@ -35,9 +41,13 @@ private:
 class ScreenClimate : public Screen {
 
 public:
+  ScreenClimate(AHT10 &aht);
   ~ScreenClimate() override;
   void show() override;
-  void update(AHT10 &aht);
   void hide() override;
+  void update() override;
   bool isActive() override;
+
+private:
+  AHT10 &aht;
 };
