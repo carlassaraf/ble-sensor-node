@@ -36,7 +36,7 @@ int main(void)
         aht10.readTemperature(temp);
         aht10.readHumidity(hum);
         lvgl.lock();
-        scrBLE.update(temp, hum);
+        scrBLE.update(ble);
         lvgl.unlock();
         k_msleep(100);
     }

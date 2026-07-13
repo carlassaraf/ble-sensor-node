@@ -1,4 +1,5 @@
 #include <lvgl.h>
+#include "ble/ble.hpp"
 
 class Screen {
 public:
@@ -12,6 +13,9 @@ class ScreenBLE : public Screen {
 public:
   ~ScreenBLE() override;
   void show() override;
-  void update(float &temp, float &hum);
+  void update(BLE &ble);
   void hide() override;
+
+private:
+  bool connected{true};
 };
