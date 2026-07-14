@@ -1,5 +1,10 @@
 #include "ble.hpp"
 
+#include <zephyr/sys/util.h>
+#include <zephyr/sys/byteorder.h>
+#include <zephyr/bluetooth/hci.h>
+#include <zephyr/bluetooth/hci_vs.h>
+
 LOG_MODULE_REGISTER(ble, LOG_LEVEL_INF);
 
 namespace ble_params {
@@ -108,4 +113,38 @@ void BLE::auth_cancel(struct bt_conn *conn)
 	char addr[BT_ADDR_LE_STR_LEN];
 	bt_addr_le_to_str(bt_conn_get_dst(conn), addr, sizeof(addr));
 	LOG_INF("Pairing cancelled: %s\n", addr);
+}
+
+void BLE::readRSSI(int8_t *rssi)
+{
+	struct net_buf *buf, *rsp = NULL;
+	struct bt_hci_cp_read_rssi *cp;
+	struct bt_hci_rp_read_rssi *rp;
+  uint16_t handle;
+
+  if(bt_hci_get_conn_handle(current_conn, &handle) < 0) {
+    return;
+  }
+
+	int err;
+
+	buf = bt_hci_cmd_alloc(K_FOREVER);
+	if (!buf) {
+		printk("Unable to allocate command buffer\n");
+		return;
+	}
+
+	cp = (struct bt_hci_cp_read_rssi *)net_buf_add(buf, sizeof(*cp));
+	cp->handle = sys_cpu_to_le16(handle);
+
+	err = bt_hci_cmd_send_sync(BT_HCI_OP_READ_RSSI, buf, &rsp);
+	if (err) {
+		printk("Read RSSI err: %d\n", err);
+		return;
+	}
+
+	rp = (struct bt_hci_rp_read_rssi *)rsp->data;
+	*rssi = rp->rssi;
+
+	net_buf_unref(rsp);
 }

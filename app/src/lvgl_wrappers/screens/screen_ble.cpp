@@ -1,15 +1,13 @@
 #include "../ui/ui.h"
 #include "screens.hpp"
 
-ScreenBLE::ScreenBLE(BLE &ble, AHT10Service &ahtService) : ble(ble), ahtService(ahtService)
-{
+#include <zephyr/logging/log.h>
 
-}
+LOG_MODULE_REGISTER(screen_ble, LOG_LEVEL_INF);
 
-ScreenBLE::~ScreenBLE()
-{
-  ui_scrBLE_screen_destroy();
-}
+ScreenBLE::ScreenBLE(BLE &ble, AHT10Service &ahtService) : ble(ble), ahtService(ahtService) { }
+
+ScreenBLE::~ScreenBLE() { }
 
 void ScreenBLE::show()
 {
@@ -18,7 +16,9 @@ void ScreenBLE::show()
 
 void ScreenBLE::hide()
 {
-
+  if(ui_scrBLE != NULL) {
+    ui_scrBLE_screen_destroy();
+  }
 }
 
 void ScreenBLE::update()
@@ -46,6 +46,7 @@ void ScreenBLE::updateConnectionStatus(BLE &ble)
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusConnected);
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusConnected);
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 3), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusConnected);
+    updateRSSI();
   } else if(!ble.isConnected() && connected) {
     connected = false;
     lv_label_set_text(ui_lblState, "ADVERTISING");
@@ -55,6 +56,7 @@ void ScreenBLE::updateConnectionStatus(BLE &ble)
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusAdvertisin);
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusAdvertisin);
     ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 3), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusAdvertisin);
+    updateRSSI();
   }
 }
 
@@ -97,5 +99,20 @@ void ScreenBLE::updateNotifyCount(void)
   if(displayedNotifyCount != notifyCount) {
     lv_label_set_text_fmt(ui_notifyCount, "%d/5", notifyCount);
     displayedNotifyCount = notifyCount;
+  }
+}
+
+void ScreenBLE::updateRSSI(void) {
+  int16_t rssi_av = 0;
+  for(uint8_t i = 0; i < 10; i++) {
+    int8_t rssi;
+    ble.readRSSI(&rssi);
+    rssi_av += rssi;
+  }
+  rssi_av /= 10;
+  if(connected) {
+    lv_label_set_text_fmt(ui_lblSubHero, "RSSI: %d dBm", rssi_av);
+  } else {
+    lv_label_set_text_fmt(ui_lblSubHero, "RSSI: --");
   }
 }

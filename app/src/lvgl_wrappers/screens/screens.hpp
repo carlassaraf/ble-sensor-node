@@ -36,6 +36,7 @@ private:
   void updateNotifyTemperature(AHT10Service &service);
   void updateNotifyHumidity(AHT10Service &service);
   void updateNotifyCount(void);
+  void updateRSSI(void);
 };
 
 class ScreenClimate : public Screen {
