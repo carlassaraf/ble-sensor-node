@@ -29,10 +29,10 @@ lv_obj_set_y( cui_dot, 0 );
 lv_obj_set_align( cui_dot, LV_ALIGN_LEFT_MID );
 lv_obj_remove_flag( cui_dot, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_obj_set_style_radius(cui_dot, 10, LV_PART_MAIN| LV_STATE_DEFAULT);
-ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_statusConnected);
-ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_statusConnected);
+ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_OPA, _ui_theme_alpha_statusAdvertisin);
+ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(cui_dot, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_statusAdvertisin);
 lv_obj_set_style_border_width(cui_dot, 1, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 lv_obj_t *cui_bleStatus;
@@ -66,8 +66,8 @@ lv_obj_set_align( cui_iconSignal, LV_ALIGN_LEFT_MID );
 lv_obj_add_flag( cui_iconSignal, LV_OBJ_FLAG_CLICKABLE );   /// Flags
 lv_obj_remove_flag( cui_iconSignal, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_image_set_scale(cui_iconSignal,153);
-ui_object_set_themeable_style_property(cui_iconSignal, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(cui_iconSignal, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR_OPA, _ui_theme_alpha_statusConnected);
+ui_object_set_themeable_style_property(cui_iconSignal, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(cui_iconSignal, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR_OPA, _ui_theme_alpha_statusAdvertisin);
 
 lv_obj_t ** children = lv_malloc(sizeof(lv_obj_t *) * _UI_COMP_TOPBAR_NUM);
 children[UI_COMP_TOPBAR_TOPBAR] = cui_topBar;

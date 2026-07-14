@@ -38,8 +38,8 @@ lv_arc_set_value(ui_statusRing, 100);
 lv_arc_set_bg_angles(ui_statusRing,0,360);
 lv_obj_set_style_arc_width(ui_statusRing, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusConnected);
+ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusAdvertisin);
 lv_obj_set_style_arc_width(ui_statusRing, 2, LV_PART_INDICATOR| LV_STATE_DEFAULT);
 
 lv_obj_set_style_pad_left(ui_statusRing, -20, LV_PART_KNOB| LV_STATE_DEFAULT);
@@ -53,12 +53,12 @@ lv_obj_set_height( ui_statusInsideRing, 9);
 lv_obj_set_align( ui_statusInsideRing, LV_ALIGN_CENTER );
 lv_arc_set_value(ui_statusInsideRing, 100);
 lv_arc_set_bg_angles(ui_statusInsideRing,0,360);
-ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusConnected);
+ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusAdvertisin);
 lv_obj_set_style_arc_width(ui_statusInsideRing, 9, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusConnected);
+ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusAdvertisin);
 
 lv_obj_set_style_pad_left(ui_statusInsideRing, -20, LV_PART_KNOB| LV_STATE_DEFAULT);
 lv_obj_set_style_pad_right(ui_statusInsideRing, -20, LV_PART_KNOB| LV_STATE_DEFAULT);
@@ -70,9 +70,9 @@ lv_obj_set_width( ui_lblState, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_lblState, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_lblState, 60 );
 lv_obj_set_y( ui_lblState, 4 );
-lv_label_set_text(ui_lblState,"CONNECTED");
-ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_OPA, _ui_theme_alpha_statusConnected);
+lv_label_set_text(ui_lblState,"ADVERTISING");
+ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_statusAdvertisin);
+ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_OPA, _ui_theme_alpha_statusAdvertisin);
 lv_obj_set_style_text_font(ui_lblState, &ui_font_title17xb, LV_PART_MAIN| LV_STATE_DEFAULT);
 
 ui_lblSubHero = lv_label_create(ui_cntHero);
