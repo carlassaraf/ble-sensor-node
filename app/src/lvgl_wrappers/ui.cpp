@@ -3,7 +3,7 @@
 #include "ui.hpp"
 
 UI::UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, const struct gpio_dt_spec &btn)
-  : scrBle(ble, ahtService), scrClimate(aht), btn(btn)
+  : scrBle(ble, ahtService), scrClimate(aht, ble), btn(btn)
 {
   lvgl.start();
 

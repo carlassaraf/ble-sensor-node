@@ -42,7 +42,7 @@ private:
 class ScreenClimate : public Screen {
 
 public:
-  ScreenClimate(AHT10 &aht);
+  ScreenClimate(AHT10 &aht, BLE &ble);
   ~ScreenClimate() override;
   void show() override;
   void hide() override;
@@ -51,4 +51,8 @@ public:
 
 private:
   AHT10 &aht;
+  BLE &ble;
+  bool connected{true};
+
+  void updateConnectionStatus();
 };

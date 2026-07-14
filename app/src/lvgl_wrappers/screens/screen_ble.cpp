@@ -1,5 +1,6 @@
 #include "../ui/ui.h"
 #include "screens.hpp"
+#include "topbar_status.hpp"
 
 #include <zephyr/logging/log.h>
 
@@ -12,6 +13,11 @@ ScreenBLE::~ScreenBLE() { }
 void ScreenBLE::show()
 {
   _ui_screen_change(&ui_scrBLE, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_scrBLE_screen_init);
+  connected = !ble.isConnected();
+  temperatureSubscribed = !ahtService.tempIsSubscribed();
+  humiditySubscribed = !ahtService.humIsSubscribed();
+  notifyCount = 0;
+  displayedNotifyCount = 0;
 }
 
 void ScreenBLE::hide()
@@ -28,6 +34,7 @@ void ScreenBLE::update()
   updateNotifyHumidity(ahtService);
   // Update label with characteristic notification count
   updateNotifyCount();
+  updateRSSI();
 }
 
 bool ScreenBLE::isActive()
@@ -43,20 +50,14 @@ void ScreenBLE::updateConnectionStatus(BLE &ble)
     ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_statusConnected);
     ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
     ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusConnected);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusConnected);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 3), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusConnected);
-    updateRSSI();
+    setTopbarConnectionStatus(ui_topBar, true);
   } else if(!ble.isConnected() && connected) {
     connected = false;
     lv_label_set_text(ui_lblState, "ADVERTISING");
     ui_object_set_themeable_style_property(ui_lblState, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_statusAdvertisin);
     ui_object_set_themeable_style_property(ui_statusRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusAdvertisin);
     ui_object_set_themeable_style_property(ui_statusInsideRing, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusAdvertisin);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BG_COLOR, _ui_theme_color_statusAdvertisin);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 0), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_statusAdvertisin);
-    ui_object_set_themeable_style_property(lv_obj_get_child(ui_topBar, 3), LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_statusAdvertisin);
-    updateRSSI();
+    setTopbarConnectionStatus(ui_topBar, false);
   }
 }
 
