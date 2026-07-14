@@ -1,14 +1,13 @@
 #include "../ui/ui.h"
 #include "screens.hpp"
 
-ScreenClimate::ScreenClimate(AHT10 &aht) : aht(aht)
-{
-  
-}
+ScreenClimate::ScreenClimate(AHT10 &aht) : aht(aht) { }
 
 ScreenClimate::~ScreenClimate()
 {
-  ui_scrClimate_screen_destroy();
+  if(ui_scrClimate != NULL) {
+    ui_scrClimate_screen_destroy();
+  } 
 }
 
 void ScreenClimate::show()
@@ -18,7 +17,9 @@ void ScreenClimate::show()
 
 void ScreenClimate::hide()
 {
-
+  if(ui_scrClimate != NULL) {
+    ui_scrClimate_screen_destroy();
+  }
 }
 
 void ScreenClimate::update()
