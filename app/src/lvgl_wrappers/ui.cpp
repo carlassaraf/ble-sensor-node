@@ -1,0 +1,61 @@
+#include "ui/ui.h"
+#include "screens/screens.hpp"
+#include "ui.hpp"
+
+UI::UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, const struct gpio_dt_spec &btn)
+  : scrBle(ble, ahtService), scrClimate(aht, ble), btn(btn)
+{
+  lvgl.start();
+
+  lvgl.lock();
+  LV_EVENT_GET_COMP_CHILD = lv_event_register_id();
+  lv_disp_t *dispp = lv_display_get_default();
+  lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED), true, LV_FONT_DEFAULT);
+  lv_display_set_theme(dispp, theme);
+  lvgl.unlock();
+
+  goTo(Screens::BLE);
+}
+
+UI::~UI()
+{
+
+}
+
+void UI::run()
+{
+  while (1) {
+    lvgl.lock();
+    scrActive->update();
+    lvgl.unlock();
+    pollButton();
+    k_msleep(100);
+  }
+}
+
+void UI::pollButton()
+{
+  bool pressed = gpio_pin_get_dt(&btn) == 1;
+  if (pressed && !btnPressed) {
+    goTo(scrActive == &scrBle ? Screens::Climate : Screens::BLE);
+  }
+  btnPressed = pressed;
+}
+
+Screen &UI::screenFor(Screens screen)
+{
+  switch (screen) {
+    case Screens::BLE:     return scrBle;
+    case Screens::Climate: return scrClimate;
+  }
+  return scrBle;
+}
+
+void UI::goTo(Screens screen)
+{
+  lvgl.lock();
+  scrActive->hide();
+  scrActive = &screenFor(screen);
+  scrActive->show();
+  lvgl.unlock();
+}

@@ -14,6 +14,7 @@ public:
   bool startAdvertising();
   bool isEnabled() const { return enabled; }
   bool isConnected() const { return connected; }
+  void readRSSI(int8_t *rssi);
 
   LED advLED;
   LED connLED;

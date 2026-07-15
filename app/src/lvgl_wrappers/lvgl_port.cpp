@@ -2,7 +2,7 @@
 #include <zephyr/drivers/display.h>
 #include <zephyr/logging/log.h>
 #include <lvgl.h>
-#include "ui.h"
+#include "ui/ui.h"
 #include "lvgl_port.hpp"
 
 LOG_MODULE_REGISTER(lvgl_port, LOG_LEVEL_INF);
@@ -51,7 +51,5 @@ void LVGL::start() {
   }
   int ret = display_blanking_off(display);
   LOG_INF("blanking_off: %d", ret);
-
-  ui_init();
   Thread::start(this);
 }
