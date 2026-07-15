@@ -6,10 +6,22 @@
 #include <zephyr/drivers/i2c.h>
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
+#include <zephyr/dt-bindings/pinctrl/nrf-pinctrl.h>
 
 #include "aht10.h"
 
 LOG_MODULE_REGISTER(aht10, CONFIG_AHT10_LOG_LEVEL);
+
+/*
+ * Decode the SDA/SCL pins straight from the i2c2 pinctrl config instead of
+ * hardcoding them here, so this log stays correct whenever the overlay's
+ * pin assignment changes.
+ */
+#define I2C_PINCTRL_GROUP DT_CHILD(DT_NODELABEL(i2c1_default), group1)
+#define I2C_SDA_PSEL DT_PROP_BY_IDX(I2C_PINCTRL_GROUP, psels, 0)
+#define I2C_SCL_PSEL DT_PROP_BY_IDX(I2C_PINCTRL_GROUP, psels, 1)
+#define PSEL_PORT(psel) (((psel) & NRF_PIN_MSK) / 32)
+#define PSEL_PIN(psel)  (((psel) & NRF_PIN_MSK) % 32)
 
 // AHT10 driver configuration structure
 struct aht10_config {
@@ -63,7 +75,9 @@ static int aht10_drv_init(const struct device *dev)
   uint8_t status;
   int ret = i2c_read_dt(&config->i2c, &status, sizeof(status));
   if (ret < 0) {
-    LOG_ERR("Failed to read AHT10 status (err %d) — check SDA=P1.02 SCL=P1.03", ret);
+    LOG_ERR("Failed to read AHT10 status (err %d) — check SDA=P%d.%02d SCL=P%d.%02d", ret,
+            PSEL_PORT(I2C_SDA_PSEL), PSEL_PIN(I2C_SDA_PSEL),
+            PSEL_PORT(I2C_SCL_PSEL), PSEL_PIN(I2C_SCL_PSEL));
     return ret;
   }
 
