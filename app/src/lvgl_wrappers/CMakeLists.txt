@@ -2,6 +2,7 @@ target_sources(app PRIVATE
 ${CMAKE_CURRENT_SOURCE_DIR}/lvgl_port.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/screens/screen_ble.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/screens/screen_climate.cpp
+${CMAKE_CURRENT_SOURCE_DIR}/screens/screen_motion.cpp
 ${CMAKE_CURRENT_SOURCE_DIR}/ui.cpp)
 
 add_subdirectory(ui)

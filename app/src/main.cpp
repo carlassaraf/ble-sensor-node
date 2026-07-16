@@ -1,8 +1,10 @@
 #include <zephyr/kernel.h>
 #include <zephyr/logging/log.h>
 #include <aht10/aht10.hpp>
+#include <mpu6050/mpu6050.hpp>
 #include <ble/ble.hpp>
 #include <ble/aht10_service.hpp>
+#include <ble/mpu6050_service.hpp>
 #include <lvgl_wrappers/lvgl_port.hpp>
 #include <lvgl_wrappers/screens/screens.hpp>
 #include <lvgl_wrappers/ui.hpp>
@@ -13,7 +15,6 @@ const struct gpio_dt_spec btn = GPIO_DT_SPEC_GET(DT_ALIAS(sw0), gpios);
 
 int main(void)
 {
-
     if(!gpio_is_ready_dt(&btn)) {
         LOG_ERR("Button not ready");
         return -1;
@@ -29,16 +30,26 @@ int main(void)
         return -1;
     }
 
+	const struct device *const mpu6050 = DEVICE_DT_GET_ONE(invensense_mpu6050);
+    MPU6050 mpu(mpu6050);
+	if (!mpu.isInitialized()) {
+		LOG_ERR("Device %s is not ready\n", mpu6050->name);
+		return 0;
+	}
+
     BLE ble(LED(BoardLEDs::led2), LED(BoardLEDs::led3), LED(BoardLEDs::led4));
     AHT10Service service(aht10, LED(BoardLEDs::led1));
     service.start();
+
+    MPU6050Service accelService(mpu);
+    accelService.start();
 
     while (!ble.isEnabled()) {
         k_msleep(10);
     }
     ble.startAdvertising();
 
-    UI ui(ble, service, aht10, btn);
+    UI ui(ble, service, accelService, aht10, mpu, btn);
     ui.run();
     return 0;
 }

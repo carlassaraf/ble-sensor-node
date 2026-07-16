@@ -2,10 +2,18 @@
   status = "okay";
   clock-frequency = <100000>;
   // Using default pins: P1.02 (SDA) and P1.03 (SCL)
+
   aht10: aht10@38 {
     compatible = "asair,aht10";
     reg = <0x38>;
   };
+
+	mpu6050@68 {
+		compatible = "invensense,mpu6050";
+		reg = <0x68>;
+		status = "okay";
+		smplrt-div = <249>;
+	};
 };
 
 / {
