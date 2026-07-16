@@ -2,8 +2,8 @@
 #include "screens/screens.hpp"
 #include "ui.hpp"
 
-UI::UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, MPU6050 &mpu, const struct gpio_dt_spec &btn)
-  : scrBle(ble, ahtService), scrClimate(aht, ble), scrMotion(mpu, ble), btn(btn)
+UI::UI(BLE &ble, AHT10Service &ahtService, MPU6050Service &accelService, AHT10 &aht, MPU6050 &mpu, const struct gpio_dt_spec &btn)
+  : scrBle(ble, ahtService, accelService), scrClimate(aht, ble), scrMotion(mpu, ble), btn(btn)
 {
   lvgl.start();
 

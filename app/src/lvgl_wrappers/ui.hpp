@@ -14,7 +14,7 @@ enum class Screens {
 class UI {
 
 public:
-  UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, MPU6050 &mpu, const struct gpio_dt_spec &btn);
+  UI(BLE &ble, AHT10Service &ahtService, MPU6050Service &accelService, AHT10 &aht, MPU6050 &mpu, const struct gpio_dt_spec &btn);
   ~UI();
   void run();
   void goTo(Screens screen);

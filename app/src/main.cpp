@@ -4,6 +4,7 @@
 #include <mpu6050/mpu6050.hpp>
 #include <ble/ble.hpp>
 #include <ble/aht10_service.hpp>
+#include <ble/mpu6050_service.hpp>
 #include <lvgl_wrappers/lvgl_port.hpp>
 #include <lvgl_wrappers/screens/screens.hpp>
 #include <lvgl_wrappers/ui.hpp>
@@ -40,12 +41,15 @@ int main(void)
     AHT10Service service(aht10, LED(BoardLEDs::led1));
     service.start();
 
+    MPU6050Service accelService(mpu);
+    accelService.start();
+
     while (!ble.isEnabled()) {
         k_msleep(10);
     }
     ble.startAdvertising();
 
-    UI ui(ble, service, aht10, btn);
+    UI ui(ble, service, accelService, aht10, mpu, btn);
     ui.run();
     return 0;
 }
