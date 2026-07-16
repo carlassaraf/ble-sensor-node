@@ -3,6 +3,7 @@
 #include <lvgl.h>
 #include "ble/ble.hpp"
 #include "ble/aht10_service.hpp"
+#include "mpu6050/mpu6050.hpp"
 
 class Screen {
 public:
@@ -51,6 +52,24 @@ public:
 
 private:
   AHT10 &aht;
+  BLE &ble;
+  bool connected{true};
+
+  void updateConnectionStatus();
+};
+
+class ScreenMotion : public Screen {
+
+public:
+  ScreenMotion(MPU6050 &mpu, BLE &ble);
+  ~ScreenMotion() override;
+  void show() override;
+  void hide() override;
+  void update() override;
+  bool isActive() override;
+
+private:
+  MPU6050 &mpu;
   BLE &ble;
   bool connected{true};
 

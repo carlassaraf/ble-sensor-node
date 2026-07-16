@@ -2,8 +2,8 @@
 #include "screens/screens.hpp"
 #include "ui.hpp"
 
-UI::UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, const struct gpio_dt_spec &btn)
-  : scrBle(ble, ahtService), scrClimate(aht, ble), btn(btn)
+UI::UI(BLE &ble, AHT10Service &ahtService, AHT10 &aht, MPU6050 &mpu, const struct gpio_dt_spec &btn)
+  : scrBle(ble, ahtService), scrClimate(aht, ble), scrMotion(mpu, ble), btn(btn)
 {
   lvgl.start();
 
@@ -37,7 +37,8 @@ void UI::pollButton()
 {
   bool pressed = gpio_pin_get_dt(&btn) == 1;
   if (pressed && !btnPressed) {
-    goTo(scrActive == &scrBle ? Screens::Climate : Screens::BLE);
+    int next = (static_cast<int>(activeScreen()) + 1) % static_cast<int>(Screens::ScreenCount);
+    goTo(static_cast<Screens>(next));
   }
   btnPressed = pressed;
 }
@@ -45,10 +46,23 @@ void UI::pollButton()
 Screen &UI::screenFor(Screens screen)
 {
   switch (screen) {
-    case Screens::BLE:     return scrBle;
-    case Screens::Climate: return scrClimate;
+    case Screens::BLE:      return scrBle;
+    case Screens::Climate:  return scrClimate;
+    case Screens::Motion:   return scrMotion;
   }
   return scrBle;
+}
+
+Screens UI::activeScreen()
+{
+  if (scrActive == &scrBle) {
+    return Screens::BLE;
+  } else if (scrActive == &scrClimate) {
+    return Screens::Climate;
+  } else if (scrActive == &scrMotion) {
+    return Screens::Motion;
+  }
+  return Screens::BLE;
 }
 
 void UI::goTo(Screens screen)
