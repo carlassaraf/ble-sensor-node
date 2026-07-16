@@ -33,6 +33,7 @@ extern lv_obj_t *ui____initial_actions0;
 LV_IMG_DECLARE( ui_img_icons_signal_png);   // assets/icons/signal.png
 LV_IMG_DECLARE( ui_img_icons_left_png);   // assets/icons/left.png
 LV_IMG_DECLARE( ui_img_icons_right_png);   // assets/icons/right.png
+LV_IMG_DECLARE( ui_img_imgs_rot_png);   // assets/imgs/rot.png
 
 // FONTS
 LV_FONT_DECLARE( ui_font_body12sb);

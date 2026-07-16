@@ -11,6 +11,7 @@ SET(SOURCES components/ui_comp_topbar.c
     images/ui_img_icons_signal_png.c
     images/ui_img_icons_left_png.c
     images/ui_img_icons_right_png.c
+    images/ui_img_imgs_rot_png.c
     fonts/ui_font_body12sb.c
     fonts/ui_font_caps11b.c
     fonts/ui_font_micro8b.c

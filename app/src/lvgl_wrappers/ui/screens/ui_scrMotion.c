@@ -5,7 +5,7 @@
 
 #include "../ui.h"
 
-lv_obj_t *ui_scrMotion = NULL;lv_obj_t *ui_topBar2 = NULL;lv_obj_t *ui_outerRing = NULL;lv_obj_t *ui_innerRing = NULL;lv_obj_t *ui_dotRing = NULL;lv_obj_t *ui_cntFooter2 = NULL;lv_obj_t *ui_cntActiveStatus2 = NULL;lv_obj_t *ui_iconLeft2 = NULL;lv_obj_t *ui_iconRight2 = NULL;lv_obj_t *ui_activeDot2 = NULL;lv_obj_t *ui_active2 = NULL;lv_obj_t *ui_inactiveDot5 = NULL;lv_obj_t *ui_inactiveDot6 = NULL;lv_obj_t *ui_hline = NULL;lv_obj_t *ui_vline = NULL;lv_obj_t *ui_bubble = NULL;lv_obj_t *ui_cntAxisX = NULL;lv_obj_t *ui_axisX = NULL;lv_obj_t *ui_axisXv = NULL;lv_obj_t *ui_unit1 = NULL;lv_obj_t *ui_cntAxisY = NULL;lv_obj_t *ui_axisY = NULL;lv_obj_t *ui_axisYv = NULL;lv_obj_t *ui_unit2 = NULL;lv_obj_t *ui_cntAxisZ = NULL;lv_obj_t *ui_axisZ = NULL;lv_obj_t *ui_axisZv = NULL;lv_obj_t *ui_unit3 = NULL;
+lv_obj_t *ui_scrMotion = NULL;lv_obj_t *ui_topBar2 = NULL;lv_obj_t *ui_ring = NULL;lv_obj_t *ui_lvl = NULL;lv_obj_t *ui_cntFooter2 = NULL;lv_obj_t *ui_cntActiveStatus2 = NULL;lv_obj_t *ui_iconLeft2 = NULL;lv_obj_t *ui_iconRight2 = NULL;lv_obj_t *ui_activeDot2 = NULL;lv_obj_t *ui_active2 = NULL;lv_obj_t *ui_inactiveDot5 = NULL;lv_obj_t *ui_inactiveDot6 = NULL;lv_obj_t *ui_hline = NULL;lv_obj_t *ui_cntAxisX = NULL;lv_obj_t *ui_axisX = NULL;lv_obj_t *ui_axisXv = NULL;lv_obj_t *ui_unit1 = NULL;lv_obj_t *ui_cntAxisY = NULL;lv_obj_t *ui_axisY = NULL;lv_obj_t *ui_axisYv = NULL;lv_obj_t *ui_unit2 = NULL;lv_obj_t *ui_cntAxisZ = NULL;lv_obj_t *ui_axisZ = NULL;lv_obj_t *ui_axisZv = NULL;lv_obj_t *ui_unit3 = NULL;
 // event funtions
 
 // build funtions
@@ -21,53 +21,32 @@ ui_topBar2 = ui_topBar_create(ui_scrMotion);
 lv_obj_set_x( ui_topBar2, 0 );
 lv_obj_set_y( ui_topBar2, 0 );
 
-ui_outerRing = lv_arc_create(ui_scrMotion);
-lv_obj_set_width( ui_outerRing, 118);
-lv_obj_set_height( ui_outerRing, 118);
-lv_obj_set_x( ui_outerRing, 18 );
-lv_obj_set_y( ui_outerRing, 57 );
-lv_arc_set_value(ui_outerRing, 0);
-lv_arc_set_bg_angles(ui_outerRing,0,360);
-ui_object_set_themeable_style_property(ui_outerRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_border);
-ui_object_set_themeable_style_property(ui_outerRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_border);
-lv_obj_set_style_arc_width(ui_outerRing, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
+ui_ring = lv_arc_create(ui_scrMotion);
+lv_obj_set_width( ui_ring, 118);
+lv_obj_set_height( ui_ring, 118);
+lv_obj_set_x( ui_ring, 18 );
+lv_obj_set_y( ui_ring, 57 );
+lv_arc_set_value(ui_ring, 0);
+lv_arc_set_bg_angles(ui_ring,0,360);
+ui_object_set_themeable_style_property(ui_ring, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_border);
+ui_object_set_themeable_style_property(ui_ring, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_border);
+lv_obj_set_style_arc_width(ui_ring, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
 
-lv_obj_set_style_pad_left(ui_outerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_right(ui_outerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_top(ui_outerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_bottom(ui_outerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_left(ui_ring, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_right(ui_ring, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_top(ui_ring, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
+lv_obj_set_style_pad_bottom(ui_ring, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
 
-ui_innerRing = lv_arc_create(ui_scrMotion);
-lv_obj_set_width( ui_innerRing, 74);
-lv_obj_set_height( ui_innerRing, 74);
-lv_obj_set_x( ui_innerRing, 40 );
-lv_obj_set_y( ui_innerRing, 78 );
-lv_arc_set_value(ui_innerRing, 0);
-lv_arc_set_bg_angles(ui_innerRing,0,360);
-ui_object_set_themeable_style_property(ui_innerRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_divider);
-ui_object_set_themeable_style_property(ui_innerRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_divider);
-lv_obj_set_style_arc_width(ui_innerRing, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-lv_obj_set_style_pad_left(ui_innerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_right(ui_innerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_top(ui_innerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_bottom(ui_innerRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-
-ui_dotRing = lv_arc_create(ui_scrMotion);
-lv_obj_set_width( ui_dotRing, 26);
-lv_obj_set_height( ui_dotRing, 26);
-lv_obj_set_x( ui_dotRing, 64 );
-lv_obj_set_y( ui_dotRing, 103 );
-lv_arc_set_value(ui_dotRing, 0);
-lv_arc_set_bg_angles(ui_dotRing,0,360);
-ui_object_set_themeable_style_property(ui_dotRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_textTertiary);
-ui_object_set_themeable_style_property(ui_dotRing, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_textTertiary);
-lv_obj_set_style_arc_width(ui_dotRing, 2, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-lv_obj_set_style_pad_left(ui_dotRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_right(ui_dotRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_top(ui_dotRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_bottom(ui_dotRing, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
+ui_lvl = lv_image_create(ui_ring);
+lv_image_set_src(ui_lvl, &ui_img_imgs_rot_png);
+lv_obj_set_width( ui_lvl, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_lvl, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_lvl, LV_ALIGN_TOP_MID );
+lv_obj_add_flag( ui_lvl, LV_OBJ_FLAG_CLICKABLE );   /// Flags
+lv_obj_remove_flag( ui_lvl, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_image_set_inner_align( ui_lvl, LV_IMAGE_ALIGN_TOP_LEFT );
+ui_object_set_themeable_style_property(ui_lvl, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR, _ui_theme_color_accent);
+ui_object_set_themeable_style_property(ui_lvl, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_IMAGE_RECOLOR_OPA, _ui_theme_alpha_accent);
 
 ui_cntFooter2 = lv_obj_create(ui_scrMotion);
 lv_obj_remove_style_all(ui_cntFooter2);
@@ -188,36 +167,6 @@ ui_object_set_themeable_style_property(ui_hline, LV_PART_MAIN| LV_STATE_DEFAULT,
 ui_object_set_themeable_style_property(ui_hline, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_border);
 lv_obj_set_style_border_width(ui_hline, 1, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_border_side(ui_hline, LV_BORDER_SIDE_FULL, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_vline = lv_obj_create(ui_scrMotion);
-lv_obj_remove_style_all(ui_vline);
-lv_obj_set_width( ui_vline, 1);
-lv_obj_set_height( ui_vline, 118);
-lv_obj_set_x( ui_vline, 77 );
-lv_obj_set_y( ui_vline, 57 );
-lv_obj_remove_flag( ui_vline, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE );    /// Flags
-ui_object_set_themeable_style_property(ui_vline, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_COLOR, _ui_theme_color_border);
-ui_object_set_themeable_style_property(ui_vline, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_BORDER_OPA, _ui_theme_alpha_border);
-lv_obj_set_style_border_width(ui_vline, 1, LV_PART_MAIN| LV_STATE_DEFAULT);
-lv_obj_set_style_border_side(ui_vline, LV_BORDER_SIDE_FULL, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_bubble = lv_arc_create(ui_scrMotion);
-lv_obj_set_width( ui_bubble, 18);
-lv_obj_set_height( ui_bubble, 18);
-lv_obj_set_x( ui_bubble, 68 );
-lv_obj_set_y( ui_bubble, 107 );
-lv_arc_set_value(ui_bubble, 100);
-lv_arc_set_bg_angles(ui_bubble,0,360);
-lv_obj_set_style_arc_width(ui_bubble, 7, LV_PART_MAIN| LV_STATE_DEFAULT);
-
-ui_object_set_themeable_style_property(ui_bubble, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_COLOR, _ui_theme_color_statusConnected);
-ui_object_set_themeable_style_property(ui_bubble, LV_PART_INDICATOR| LV_STATE_DEFAULT, LV_STYLE_ARC_OPA, _ui_theme_alpha_statusConnected);
-lv_obj_set_style_arc_width(ui_bubble, 7, LV_PART_INDICATOR| LV_STATE_DEFAULT);
-
-lv_obj_set_style_pad_left(ui_bubble, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_right(ui_bubble, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_top(ui_bubble, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
-lv_obj_set_style_pad_bottom(ui_bubble, -10, LV_PART_KNOB| LV_STATE_DEFAULT);
 
 ui_cntAxisX = lv_obj_create(ui_scrMotion);
 lv_obj_remove_style_all(ui_cntAxisX);
@@ -348,9 +297,8 @@ void ui_scrMotion_screen_destroy(void)
 // NULL screen variables
 ui_scrMotion= NULL;
 ui_topBar2= NULL;
-ui_outerRing= NULL;
-ui_innerRing= NULL;
-ui_dotRing= NULL;
+ui_ring= NULL;
+ui_lvl= NULL;
 ui_cntFooter2= NULL;
 ui_cntActiveStatus2= NULL;
 ui_iconLeft2= NULL;
@@ -360,8 +308,6 @@ ui_active2= NULL;
 ui_inactiveDot5= NULL;
 ui_inactiveDot6= NULL;
 ui_hline= NULL;
-ui_vline= NULL;
-ui_bubble= NULL;
 ui_cntAxisX= NULL;
 ui_axisX= NULL;
 ui_axisXv= NULL;
