@@ -22,6 +22,7 @@ extern "C" {
 ///////////////////// SCREENS ////////////////////
 #include "screens/ui_scrBLE.h"
 #include "screens/ui_scrClimate.h"
+#include "screens/ui_scrMotion.h"
 
 ///////////////////// VARIABLES ////////////////////
 

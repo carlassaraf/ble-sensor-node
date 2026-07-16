@@ -32,6 +32,7 @@ lv_theme_t *theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE
 lv_disp_set_theme(dispp, theme);
 ui_scrBLE_screen_init();
 ui_scrClimate_screen_init();
+ui_scrMotion_screen_init();
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_scrBLE);
 }
@@ -39,4 +40,5 @@ lv_disp_load_scr( ui_scrBLE);
 void ui_destroy( void )
 {ui_scrBLE_screen_destroy();
 ui_scrClimate_screen_destroy();
+ui_scrMotion_screen_destroy();
 }

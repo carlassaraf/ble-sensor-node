@@ -507,7 +507,7 @@ ui_object_set_themeable_style_property(ui_iconRight, LV_PART_MAIN| LV_STATE_DEFA
 ui_activeDot = lv_arc_create(ui_cntFooter);
 lv_obj_set_width( ui_activeDot, 8);
 lv_obj_set_height( ui_activeDot, 8);
-lv_obj_set_x( ui_activeDot, 130 );
+lv_obj_set_x( ui_activeDot, 120 );
 lv_obj_set_y( ui_activeDot, 0 );
 lv_obj_set_align( ui_activeDot, LV_ALIGN_LEFT_MID );
 lv_arc_set_value(ui_activeDot, 100);
@@ -524,6 +524,8 @@ lv_obj_set_style_pad_bottom(ui_activeDot, -40, LV_PART_KNOB| LV_STATE_DEFAULT);
 ui_active = lv_label_create(ui_cntFooter);
 lv_obj_set_width( ui_active, LV_SIZE_CONTENT);  /// 1
 lv_obj_set_height( ui_active, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_x( ui_active, -10 );
+lv_obj_set_y( ui_active, 0 );
 lv_obj_set_align( ui_active, LV_ALIGN_CENTER );
 lv_label_set_text(ui_active,"STATUS");
 ui_object_set_themeable_style_property(ui_active, LV_PART_MAIN| LV_STATE_DEFAULT, LV_STYLE_TEXT_COLOR, _ui_theme_color_accent);
@@ -533,7 +535,7 @@ lv_obj_set_style_text_font(ui_active, &ui_font_micro8b, LV_PART_MAIN| LV_STATE_D
 ui_inactiveDot1 = lv_arc_create(ui_cntFooter);
 lv_obj_set_width( ui_inactiveDot1, 8);
 lv_obj_set_height( ui_inactiveDot1, 8);
-lv_obj_set_x( ui_inactiveDot1, 185 );
+lv_obj_set_x( ui_inactiveDot1, 175 );
 lv_obj_set_y( ui_inactiveDot1, 0 );
 lv_obj_set_align( ui_inactiveDot1, LV_ALIGN_LEFT_MID );
 lv_arc_set_value(ui_inactiveDot1, 100);
@@ -550,7 +552,7 @@ lv_obj_set_style_pad_bottom(ui_inactiveDot1, -40, LV_PART_KNOB| LV_STATE_DEFAULT
 ui_inactiveDot2 = lv_arc_create(ui_cntFooter);
 lv_obj_set_width( ui_inactiveDot2, 8);
 lv_obj_set_height( ui_inactiveDot2, 8);
-lv_obj_set_x( ui_inactiveDot2, 200 );
+lv_obj_set_x( ui_inactiveDot2, 190 );
 lv_obj_set_y( ui_inactiveDot2, 0 );
 lv_obj_set_align( ui_inactiveDot2, LV_ALIGN_LEFT_MID );
 lv_arc_set_value(ui_inactiveDot2, 100);
